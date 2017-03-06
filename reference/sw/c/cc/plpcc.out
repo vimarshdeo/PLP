@@ -1,0 +1,168 @@
+#
+# LINE 11: }
+#
+	.org 0x10000000
+	li $sp, 0x10fffffc
+main:
+	addiu $sp, $sp, -24
+#
+# LINE 3: 	for(i=0;i<2;i++){
+#
+	addiu $t0, $sp, 24 # *i
+	push $t0
+	li $t0, 0
+	pop $t1
+	sw $t0, 0($t1)
+#
+# LINE 9: 	}
+#
+PLPCC_000000:
+	lw $t0, 24($sp) # i
+	push $t0
+	li $t0, 2
+	pop $t1
+	slt $t0, $t1, $t0
+	beq $t0, $zero, PLPCC_000001
+	nop
+#
+# LINE 4: 		for(j=0;j<2;j++){
+#
+	addiu $t0, $sp, 20 # *j
+	push $t0
+	li $t0, 0
+	pop $t1
+	sw $t0, 0($t1)
+#
+# LINE 8: 		}
+#
+PLPCC_000003:
+	lw $t0, 20($sp) # j
+	push $t0
+	li $t0, 2
+	pop $t1
+	slt $t0, $t1, $t0
+	beq $t0, $zero, PLPCC_000004
+	nop
+#
+# LINE 5: 			a[i][j]=i;
+#
+	addiu $t0, $sp, 4 # *a
+	push $t0
+	lw $t0, 28($sp) # i
+	pop $t1
+	sll $t0, $t0, 2
+	addu $t0, $t0, $t1
+	push $t0
+	lw $t0, 24($sp) # j
+	pop $t1
+	sll $t0, $t0, 2
+	addu $t0, $t0, $t1
+	push $t0
+	lw $t0, 28($sp) # i
+	pop $t1
+	sw $t0, 0($t1)
+#
+# LINE 6: 			plp_printint(a[i][j]);
+#
+	addiu $t0, $sp, 4 # *a
+	push $t0
+	lw $t0, 28($sp) # i
+	pop $t1
+	sll $t0, $t0, 2
+	addu $t0, $t0, $t1
+	push $t0
+	lw $t0, 24($sp) # j
+	pop $t1
+	sll $t0, $t0, 2
+	addu $t0, $t0, $t1
+	lw $t0, 0($t0)
+	li $t1, 10
+	jal modulus
+	nop
+	j PLPCC_000006
+	nop
+modulus:
+	li $t5, 0 #counter
+	li $t4, 0 
+	li $v0, 0		# return value
+	li $t3, 0		# align shift count
+align:
+	beq $t1, $t0, long_modulus_loop
+	nop
+	slt $t2, $t1, $t0	#t1 < t0
+	beq $t2, $0, long_modulus_loop
+	nop
+	sll $t1, $t1, 1
+	addiu $t3, $t3, 1
+	j align
+	nop
+long_modulus_loop:
+	slt $t2, $t1, $t0	#t0 > t1
+	beq $t2, $0, not_less_than
+	nop
+	subu $t0, $t0, $t1
+not_less_than:
+	bne $t1, $t0, not_equal
+	nop
+	addiu $t2, $t2, 1
+	subu $t0, $t0, $t1
+not_equal:
+	nop
+	sll $v0, $v0, 1	#shift result left
+	addu $v0, $v0, $t2
+	beq $t4, $t3, modulus_exit
+	nop
+	srl $t1, $t1, 1
+	addiu $t4, $t4, 1
+	j long_modulus_loop
+	nop
+modulus_exit:
+	addiu $t0, $t0, 48 #adding ascii value
+	push $t0
+	move $t0, $v0
+	addiu $t5, $t5 , 1
+	li $t1, 10
+	slt $t3, $t0, $t1
+	beq $t3, $zero, modulus
+	nop
+SingleDigit:
+	addiu $t0, $t0, 48
+	push $t0
+	addiu $t5, $t5 , 1
+libplp_uart_write:
+	lui $t0, 0xf000		#uart base address
+libplp_uart_write_loop:
+	lw  $t1, 4($t0)		#get the uart status
+	andi $t1, $t1, 0x01	#mask for the cts bit
+	beq $t1, $zero, libplp_uart_write_loop
+	nop
+print:
+	pop $a0
+	sw  $a0, 12($t0)	#write the data to the output buffer
+	sw  $t1, 0($t0)		#send the data!
+	addiu $t5, $t5, -1		#decrement counter
+	bne $t5, $zero, print
+	nop
+	jr $ra
+	nop
+PLPCC_000006:
+PLPCC_000005:
+	addiu $t0, $sp, 20 # *j
+	lw $t1, 0($t0)
+	addiu $t2, $t1, 1
+	sw $t2, 0($t0)
+	move $t0, $t1
+	j PLPCC_000003
+	nop
+PLPCC_000004:
+PLPCC_000002:
+	addiu $t0, $sp, 24 # *i
+	lw $t1, 0($t0)
+	addiu $t2, $t1, 1
+	sw $t2, 0($t0)
+	move $t0, $t1
+	j PLPCC_000000
+	nop
+PLPCC_000001:
+	addiu $sp, $sp, 24	# Epilogue
+	return

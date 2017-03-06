@@ -1,0 +1,4 @@
+main.c:31:21: fatal error: archive.h: No such file or directory
+ #include <archive.h>
+                     ^
+compilation terminated.

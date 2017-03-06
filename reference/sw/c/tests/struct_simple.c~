@@ -1,0 +1,7 @@
+void sex(int a,b,c=30){
+int d = a+b+c;
+}
+
+void main(void) {
+	sex(10,20);
+}

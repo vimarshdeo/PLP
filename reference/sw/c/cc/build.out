@@ -1,0 +1,73 @@
+symbol.c: In function ‘install_symbol’:
+symbol.c:200:9: warning: implicit declaration of function ‘number_of_members’ [-Wimplicit-function-declaration]
+         temp -> size = number_of_members(temp);
+         ^
+symbol.c: In function ‘find_symbol’:
+symbol.c:351:16: warning: unused variable ‘temp’ [-Wunused-variable]
+  struct_table *temp;
+                ^
+symbol.c:350:16: warning: unused variable ‘st’ [-Wunused-variable]
+  symbol_table *st;
+                ^
+symbol.c: In function ‘print_frames’:
+symbol.c:417:10: warning: unused variable ‘curr’ [-Wunused-variable]
+  symbol *curr = NULL;
+          ^
+symbol.c: In function ‘install_symbol’:
+symbol.c:347:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+line.c: In function ‘build_lines’:
+line.c:48:2: warning: pointer targets in passing argument 2 of ‘getline’ differ in signedness [-Wpointer-sign]
+  while (getline(&line, &len, fp) != -1) {
+  ^
+In file included from line.c:19:0:
+/usr/include/stdio.h:678:20: note: expected ‘size_t * __restrict__’ but argument is of type ‘ssize_t *’
+ extern _IO_ssize_t getline (char **__restrict __lineptr,
+                    ^
+handlers.c: In function ‘handle_postfix_expr’:
+handlers.c:249:3: warning: implicit declaration of function ‘find_struct’ [-Wimplicit-function-declaration]
+   struct_table *curr = find_struct(struct_type);
+   ^
+handlers.c:249:24: warning: initialization makes pointer from integer without a cast [enabled by default]
+   struct_table *curr = find_struct(struct_type);
+                        ^
+handlers.c:311:24: warning: initialization makes pointer from integer without a cast [enabled by default]
+   struct_table *curr = find_struct(struct_type);
+                        ^
+lexer.lex: In function ‘yylex’:
+lexer.lex:81:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ {L}({L}|{D})*  { yylval = id((char*)yytext); count(); return(check_type((char*)yytext)); }
+          ^
+lexer.lex:83:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ 0[xX]{H}+{IS}?  { yylval = con((char*)yytext); count(); return(CONSTANT); }
+          ^
+lexer.lex:84:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ 0{D}+{IS}?  { yylval = con((char*)yytext); count(); return(CONSTANT); }
+          ^
+lexer.lex:85:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ {D}+{IS}?  { yylval = con((char*)yytext); count(); return(CONSTANT); }
+          ^
+lexer.lex:86:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ L?'(\\.|[^\\'])+' { yylval = con((char*)yytext); count(); return(CONSTANT); }
+          ^
+lexer.lex:88:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ {D}+{E}{FS}?  { yylval = con((char*)yytext); count(); return(CONSTANT); }
+          ^
+lexer.lex:89:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ {D}*"."{D}+({E})?{FS}? { yylval = con((char*)yytext); count(); return(CONSTANT); }
+          ^
+lexer.lex:90:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ {D}+"."{D}*({E})?{FS}? { yylval = con((char*)yytext); count(); return(CONSTANT); }
+          ^
+lexer.lex:92:10: warning: assignment makes integer from pointer without a cast [enabled by default]
+ L?\"(\\.|[^\\"])*\" { yylval = str((char*)yytext); count(); return(STRING_LITERAL); }
+          ^
+lexer.lex: At top level:
+lex.yy.c:1764:17: warning: ‘yyunput’ defined but not used [-Wunused-function]
+     static void yyunput (int c, register char * yy_bp )
+                 ^
+main.c: In function ‘main’:
+main.c:237:9: warning: ignoring return value of ‘system’, declared with attribute warn_unused_result [-Wunused-result]
+   system(S_GRAPH_COMMAND);
+         ^
